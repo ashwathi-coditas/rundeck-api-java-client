@@ -103,6 +103,7 @@ public class RundeckClient implements Serializable {
         V19(19),
         V20(20),
         V21(21),
+        V27(27)
         ;
 
         private int versionNumber;
@@ -2667,6 +2668,38 @@ public class RundeckClient implements Serializable {
         }
         new ApiCall(this).delete(new ApiPathBuilder(STORAGE_ROOT_PATH, path));
     }
+
+
+    /**
+     * Update a single execution, identified by the given ID with status
+     *
+     * @param executionId
+     *            identifier for the execution - mandatory
+     * @param status
+     * 			  Status to be set
+     * @param previousStatus
+     * 			  previous status of execution
+     * @param dateCompleted
+     *            datetime at which execution completed/failed
+     * @throws RundeckApiException
+     *             in case of error when calling the API (non-existent execution
+     *             with this ID)
+     * @throws RundeckApiLoginException
+     *             if the login fails (in case of login-based authentication)
+     * @throws RundeckApiTokenException
+     *             if the token is invalid (in case of token-based authentication)
+     * @throws IllegalArgumentException
+     *             if the executionId/status/previousStatus is null
+     */
+    public RundeckExecution updateExecution(final Long executionId, String status, String previousStatus, String dateCompleted)
+            throws RundeckApiException, RundeckApiLoginException, RundeckApiTokenException, IllegalArgumentException {
+        AssertUtil.notNull(executionId, "executionId is mandatory to update an execution!");
+        AssertUtil.notNull(status, "status is mandatory to update an execution!");
+        AssertUtil.notNull(previousStatus, "previousStatus is mandatory to update an execution!");
+        return new ApiCall(this).get(new ApiPathBuilder("/execution/", executionId.toString(), "/update")
+                .param("status", status).param("previousStatus", previousStatus).param("dateCompleted",dateCompleted), new ExecutionParser("/executions/execution"));
+    }
+
 
     /**
      * @return the URL of the Rundeck instance ("http://localhost:4440", "http://rundeck.your-compagny.com/", etc)
