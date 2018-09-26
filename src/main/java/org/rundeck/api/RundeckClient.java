@@ -34,7 +34,6 @@ import org.rundeck.api.util.PagedResults;
 import org.rundeck.api.util.ParametersUtil;
 
 import java.io.*;
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
